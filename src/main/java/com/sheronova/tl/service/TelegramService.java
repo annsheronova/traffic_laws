@@ -1,10 +1,8 @@
 package com.sheronova.tl.service;
 
-import com.sheronova.tl.handler.CommandsHandler;
+import com.sheronova.tl.handler.TrafficLawsQuestHandler;
 import com.sheronova.tl.repository.UserRepository;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
@@ -23,11 +21,17 @@ public class TelegramService {
     private static final String TRAFFIC_LAW_USERNAME = "ASH416HELLOBot";
     private static final String TRAFFIC_LAW_TOKEN = "1021455160:AAHLcvTjAmKckQ29OqVg2LSNF4BO6Mzcv4k";
 
-    @NonNull
-    private UserRepository userRepository;
+    private UserService userService;
 
-    public TelegramService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private QuestService questService;
+
+    private MarathonService marathonService;
+
+    public TelegramService(UserService userService,
+                           QuestService questService, MarathonService marathonService) {
+        this.userService = userService;
+        this.questService = questService;
+        this.marathonService = marathonService;
         ApiContextInitializer.init(); // Инициализируем апи
         TelegramBotsApi botapi = new TelegramBotsApi();
         try {
@@ -43,7 +47,8 @@ public class TelegramService {
             botOptions.setProxyHost("grsst.s5.opennetwork.cc");
             botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
 
-            botapi.registerBot(new CommandsHandler(botOptions, TRAFFIC_LAW_USERNAME, TRAFFIC_LAW_TOKEN, userRepository));
+            botapi.registerBot(new TrafficLawsQuestHandler(botOptions, TRAFFIC_LAW_USERNAME, TRAFFIC_LAW_TOKEN,
+                    userService, questService, marathonService));
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }

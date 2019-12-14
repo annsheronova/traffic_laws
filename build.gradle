@@ -8,7 +8,6 @@ group 'com.sheronova'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'io.spring.dependency-management'
-apply plugin: "com.gorylenko.gradle-git-properties"
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
@@ -29,6 +28,8 @@ dependencies {
     implementation 'org.telegram:telegrambots:4.0.1'
     implementation 'org.telegram:telegrambotsextensions:4.0.1'
     implementation 'org.telegram:telegrambots-meta:4.0.1'
+    
+    implementation 'org.jsoup:jsoup:1.10.2'
 
     runtime 'org.postgresql:postgresql:42.2.8'
 

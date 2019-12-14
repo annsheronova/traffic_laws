@@ -14,11 +14,11 @@ public class UserService {
     @NonNull
     private UserRepository userRepository;
 
-    private User getUserById(Integer id) {
+    public User getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    private void saveUser(User user) {
+    public void saveUser(User user) {
         userRepository.save(user);
     }
 }
