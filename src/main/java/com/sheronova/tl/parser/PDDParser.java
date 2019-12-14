@@ -124,7 +124,7 @@ public class PDDParser {
                         out.close();
                         in.close();
                         byte[] response = out.toByteArray();
-                        String filePath = "/home/anna/telegram/src/main/resources/images/" + id + ".jpg";
+                        String filePath = "/home/anna/home-projects/telegram-bots/traffic_laws/src/main/resources/images/" + id + ".jpg";
                         FileOutputStream fos = new FileOutputStream(filePath);
                         fos.write(response);
                         fos.close();

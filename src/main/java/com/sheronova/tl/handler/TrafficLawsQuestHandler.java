@@ -14,6 +14,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -22,6 +23,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,12 +145,17 @@ public class TrafficLawsQuestHandler extends TelegramLongPollingBot {
             sendFinishMessage(callbackQuery);
             return;
         }
+
         SendMessage sendMessageRequest = new SendMessage();
         sendMessageRequest.setChatId(callbackQuery.getMessage().getChatId().toString());
         sendMessageRequest.setText(questText(quest));
-        sendMessageRequest.enableMarkdown(true);
         sendMessageRequest.setReplyMarkup(this.getQuestMarkaup(quest.getImageFile(), quest.getId(), quest.getAnswers()));
         try {
+            if (quest.getImageFile() != null ) {
+                SendPhoto photo = new SendPhoto().setPhoto(new File(quest.getImageFile()))
+                        .setChatId(callbackQuery.getMessage().getChatId());
+                execute(photo);
+            }
             execute(sendMessageRequest);
         } catch (TelegramApiException e) {
             e.printStackTrace();
